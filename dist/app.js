@@ -25,16 +25,16 @@ const works = [
   { id: 'ecommerce-sofa', title: '电商换装视频 · 沙发', category: 'ecommerce', type: 'video', src: './assets/works/ecommerce/sofa.mp4', poster: './assets/works/ecommerce/sofa.jpg' },
   { id: 'logo-motion-01', title: 'Logo 动效 01', category: 'logo-motion', type: 'video', src: './assets/works/logo-motion/logo-motion-01.mp4', poster: './assets/works/logo-motion/logo-motion-01.jpg' },
   { id: 'logo-motion-02', title: 'Logo 动效 02', category: 'logo-motion', type: 'video', src: './assets/works/logo-motion/logo-motion-02.mp4', poster: './assets/works/logo-motion/logo-motion-02.jpg' },
-  { id: 'dji-01', title: '大疆概念海报 01', category: 'poster', type: 'image', src: './assets/works/posters/dji-01.webp' },
-  { id: 'dji-02', title: '大疆概念海报 02', category: 'poster', type: 'image', src: './assets/works/posters/dji-02.webp' },
-  { id: 'dji-03', title: '大疆概念海报 03', category: 'poster', type: 'image', src: './assets/works/posters/dji-03.webp' },
-  { id: 'dji-04', title: '大疆概念海报 04', category: 'poster', type: 'image', src: './assets/works/posters/dji-04.webp' },
-  { id: 'dji-05', title: '大疆概念海报 05', category: 'poster', type: 'image', src: './assets/works/posters/dji-05.webp' },
-  { id: 'dji-06', title: '大疆概念海报 06', category: 'poster', type: 'image', src: './assets/works/posters/dji-06.webp' },
-  { id: 'xiaomi-01', title: '小米汽车概念海报 01', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-01.webp' },
-  { id: 'xiaomi-02', title: '小米汽车概念海报 02', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-02.webp' },
-  { id: 'xiaomi-03', title: '小米汽车概念海报 03', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-03.webp' },
-  { id: 'xiaomi-04', title: '小米汽车概念海报 04', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-04.webp' },
+  { id: 'dji-01', title: '大疆概念海报 01', category: 'poster', type: 'image', src: './assets/works/posters/dji-01.jpg' },
+  { id: 'dji-02', title: '大疆概念海报 02', category: 'poster', type: 'image', src: './assets/works/posters/dji-02.jpg' },
+  { id: 'dji-03', title: '大疆概念海报 03', category: 'poster', type: 'image', src: './assets/works/posters/dji-03.jpg' },
+  { id: 'dji-04', title: '大疆概念海报 04', category: 'poster', type: 'image', src: './assets/works/posters/dji-04.jpg' },
+  { id: 'dji-05', title: '大疆概念海报 05', category: 'poster', type: 'image', src: './assets/works/posters/dji-05.jpg' },
+  { id: 'dji-06', title: '大疆概念海报 06', category: 'poster', type: 'image', src: './assets/works/posters/dji-06.jpg' },
+  { id: 'xiaomi-01', title: '小米汽车概念海报 01', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-01.jpg' },
+  { id: 'xiaomi-02', title: '小米汽车概念海报 02', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-02.jpg' },
+  { id: 'xiaomi-03', title: '小米汽车概念海报 03', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-03.jpg' },
+  { id: 'xiaomi-04', title: '小米汽车概念海报 04', category: 'poster', type: 'image', src: './assets/works/posters/xiaomi-04.jpg' },
 ];
 
 const featured = [
@@ -73,6 +73,32 @@ let lastTrailTime = 0;
 let galleryIndex = 0;
 
 const mediaSource = (work) => work.poster || work.src;
+
+const safePlay = (video) => {
+  const playResult = video.play();
+  if (playResult && typeof playResult.catch === 'function') playResult.catch(() => {});
+};
+
+const dialogIsOpen = (dialog) => Boolean(dialog.open || dialog.hasAttribute('open'));
+
+const showDialog = (dialog) => {
+  if (typeof dialog.showModal === 'function') dialog.showModal();
+  else {
+    dialog.setAttribute('open', '');
+    dialog.classList.add('dialog-fallback');
+    document.body.classList.add('modal-open');
+  }
+  requestAnimationFrame(() => dialog.classList.add('is-open'));
+};
+
+const hideDialog = (dialog) => {
+  if (typeof dialog.close === 'function') dialog.close();
+  else {
+    dialog.removeAttribute('open');
+    dialog.classList.remove('dialog-fallback');
+    if (!document.querySelector('dialog[open]')) document.body.classList.remove('modal-open');
+  }
+};
 
 const createMarqueeCard = (work, duplicate) => {
   const button = document.createElement('button');
@@ -231,15 +257,14 @@ const openGallery = () => {
     return button;
   }));
   updateGallery();
-  posterGallery.showModal();
-  requestAnimationFrame(() => posterGallery.classList.add('is-open'));
+  showDialog(posterGallery);
 };
 
 const closeGallery = () => {
-  if (!posterGallery.open) return;
+  if (!dialogIsOpen(posterGallery)) return;
   posterGallery.classList.remove('is-open');
   window.setTimeout(() => {
-    if (posterGallery.open) posterGallery.close();
+    if (dialogIsOpen(posterGallery)) hideDialog(posterGallery);
   }, reducedMotion.matches ? 0 : 240);
 };
 
@@ -261,17 +286,19 @@ const openViewer = (work) => {
     viewerImage.src = work.src;
     viewerImage.alt = work.title;
   }
-  viewer.showModal();
-  requestAnimationFrame(() => viewer.classList.add('is-open'));
-  if (work.type === 'video') viewerVideo.play().catch(() => {});
+  showDialog(viewer);
+  if (work.type === 'video') safePlay(viewerVideo);
 };
 
 const closeViewer = () => {
-  if (!viewer.open) return;
+  if (!dialogIsOpen(viewer)) return;
   viewer.classList.remove('is-open');
   viewerVideo.pause();
   window.setTimeout(() => {
-    if (viewer.open) viewer.close();
+    if (dialogIsOpen(viewer)) hideDialog(viewer);
+    viewerVideo.removeAttribute('src');
+    viewerVideo.load();
+    viewerImage.removeAttribute('src');
   }, reducedMotion.matches ? 0 : 260);
 };
 
@@ -328,10 +355,16 @@ document.querySelectorAll('[data-gallery]').forEach((button) => {
   });
 });
 
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  if (dialogIsOpen(viewer)) closeViewer();
+  if (dialogIsOpen(posterGallery)) closeGallery();
+});
+
 let revealObserver;
 function observeReveals(root = document) {
   const elements = [...root.querySelectorAll('.reveal:not([data-observed])')];
-  if (reducedMotion.matches) {
+  if (reducedMotion.matches || !('IntersectionObserver' in window)) {
     elements.forEach((element) => element.classList.add('is-visible'));
     return;
   }
@@ -350,16 +383,16 @@ function observeReveals(root = document) {
   });
 }
 
-const videoObserver = new IntersectionObserver((entries) => {
+const videoObserver = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     const video = entry.target;
-    if (entry.isIntersecting && !reducedMotion.matches) video.play().catch(() => {});
+    if (entry.isIntersecting && !reducedMotion.matches) safePlay(video);
     else video.pause();
   });
-}, { threshold: .45 });
+}, { threshold: .45 }) : null;
 
-partnerCard.addEventListener('pointermove', (event) => {
-  if (event.pointerType !== 'mouse' || reducedMotion.matches) return;
+partnerCard.addEventListener('onpointermove' in window ? 'pointermove' : 'mousemove', (event) => {
+  if ((event.pointerType && event.pointerType !== 'mouse') || reducedMotion.matches) return;
   const now = performance.now();
   if (now - lastTrailTime < 90) return;
   lastTrailTime = now;
@@ -381,4 +414,6 @@ renderMarquee();
 renderFeatured();
 renderArchive();
 observeReveals();
-document.querySelectorAll('.featured-media video').forEach((video) => videoObserver.observe(video));
+if (videoObserver) {
+  document.querySelectorAll('.featured-media video').forEach((video) => videoObserver.observe(video));
+}
