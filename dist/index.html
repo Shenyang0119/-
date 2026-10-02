@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="沈阳的个人视觉作品集，收录 AIGC 影像、创意广告、产品视觉与海报设计。" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23051A24'/%3E%3Cpath d='M17 18h31v9H28v6h17v8H28v7H17V18Z' fill='white'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css?v=13" />
+    <script src="./app.js?v=13" defer></script>
+    <title>沈阳 — AIGC 视觉作品集</title>
+  </head>
+  <body>
+    <main>
+      <section class="hero narrow" id="top" aria-labelledby="heroTitle">
+        <p class="studio-name reveal">Shen Yang</p>
+        <p class="eyebrow reveal" data-delay="1">AIGC VISUAL CREATOR · PORTFOLIO 2026</p>
+        <h1 id="heroTitle" class="reveal" data-delay="2">让创意形成<br /><em>鲜明的视觉记忆。</em></h1>
+        <div class="hero-copy reveal" data-delay="3">
+          <p>这里收录我近年的 AIGC 影像、创意广告、产品 CG 与海报设计。每个项目都从概念、视觉语言到最终画面完整推进。</p>
+          <p>这个网站作为简历的作品补充，让作品本身成为主角。</p>
+        </div>
+        <div class="hero-actions reveal" data-delay="4">
+          <a class="button button-primary" href="#projects">查看作品</a>
+          <a class="button button-light" href="mailto:v530232127@mail.bnbu.edu.cn">联系我</a>
+        </div>
+      </section>
+
+      <section class="marquee-section reveal" aria-label="作品动态预览">
+        <div class="marquee" id="marquee">
+          <div class="marquee-track" id="marqueeTrack"></div>
+        </div>
+      </section>
+
+      <section class="statement narrow" aria-labelledby="statementTitle">
+        <span class="quote-mark reveal" aria-hidden="true">“</span>
+        <h2 id="statementTitle" class="reveal" data-delay="1">作品不只展示完成度，也应该让创意拥有明确的<em>情绪与记忆点。</em></h2>
+        <p class="statement-author reveal" data-delay="2">沈阳 · AIGC 视觉创作者</p>
+        <div class="discipline-row reveal" data-delay="3" aria-label="创作方向">
+          <span>AIGC</span><span>MOTION</span><span>CG</span><span>POSTER</span>
+        </div>
+      </section>
+
+      <section class="projects shell" id="projects" aria-labelledby="projectsTitle">
+        <header class="section-head reveal">
+          <p class="eyebrow">SELECTED PROJECTS</p>
+          <h2 id="projectsTitle">重点<em>作品</em></h2>
+        </header>
+        <div class="featured-list" id="featuredList"></div>
+      </section>
+
+      <section class="archive shell" id="archive" aria-labelledby="archiveTitle">
+        <header class="archive-head reveal">
+          <div>
+            <p class="eyebrow">PROJECT ARCHIVE</p>
+            <h2 id="archiveTitle">全部作品</h2>
+          </div>
+          <div class="archive-filters" aria-label="作品筛选">
+            <button type="button" data-filter="all" aria-pressed="true">全部</button>
+            <button type="button" data-filter="video" aria-pressed="false">视频</button>
+            <button type="button" data-filter="image" aria-pressed="false">海报</button>
+          </div>
+        </header>
+        <div class="archive-grid" id="archiveGrid"></div>
+      </section>
+
+      <section class="partner shell" id="contact" aria-labelledby="contactTitle">
+        <div class="partner-card" id="partnerCard">
+          <p class="eyebrow reveal">LET'S CREATE</p>
+          <h2 id="contactTitle" class="reveal" data-delay="1">一起做点<br /><em>有记忆点的东西。</em></h2>
+          <a class="button button-primary reveal" data-delay="2" href="mailto:v530232127@mail.bnbu.edu.cn">
+            <span class="contact-avatar">SY</span>
+            联系沈阳
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer shell">
+      <a class="button button-primary" href="mailto:v530232127@mail.bnbu.edu.cn">发送邮件</a>
+      <nav aria-label="页脚导航">
+        <a href="#top">首页</a>
+        <a href="#projects">重点作品</a>
+        <a href="#archive">全部作品</a>
+        <a href="#contact">联系</a>
+      </nav>
+      <div class="copyright"><span>Shen Yang Portfolio</span><span>© 2026</span></div>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="快捷导航">
+      <a class="bottom-mark" href="#top" aria-label="回到顶部">S</a>
+      <a href="#archive">作品</a>
+      <a class="button button-primary" href="mailto:v530232127@mail.bnbu.edu.cn">联系我</a>
+    </nav>
+
+    <dialog class="viewer" id="viewer" aria-labelledby="viewerTitle">
+      <div class="viewer-shell">
+        <header class="viewer-head">
+          <div>
+            <p id="viewerCategory">WORK</p>
+            <h2 id="viewerTitle">作品名称</h2>
+          </div>
+          <button class="viewer-close" type="button" aria-label="关闭作品">关闭</button>
+        </header>
+        <div class="viewer-stage">
+          <video id="viewerVideo" controls playsinline preload="metadata" hidden></video>
+          <img id="viewerImage" alt="" hidden />
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="gallery" id="posterGallery" aria-labelledby="galleryTitle">
+      <div class="gallery-shell">
+        <header class="gallery-head">
+          <div>
+            <p>POSTER COLLECTION</p>
+            <h2 id="galleryTitle">代表海报合集</h2>
+          </div>
+          <button class="gallery-close" type="button" aria-label="关闭海报合集">关闭</button>
+        </header>
+        <div class="gallery-stage">
+          <button class="gallery-arrow" type="button" data-gallery="previous" aria-label="上一张海报">‹</button>
+          <img id="galleryImage" alt="" />
+          <button class="gallery-arrow" type="button" data-gallery="next" aria-label="下一张海报">›</button>
+        </div>
+        <div class="gallery-meta">
+          <div><strong id="galleryName"></strong><span id="galleryCount"></span></div>
+          <div class="gallery-thumbs" id="galleryThumbs" aria-label="选择海报"></div>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>
